@@ -1,9 +1,14 @@
 import { NextResponse } from 'next/server'
-// import crypto from "crypto"
+import crypto from "crypto"
 // import getRawBody from "raw-body"
 
 export async function POST(request: Request) {
     const data = await request.json()
+    const signature = crypto
+      .createHmac('sha1', process.env.WEBHOOK_SECRET ? process.env.WEBHOOK_SECRET : '')
+      .update(data)
+      .digest('hex');
+    console.log(signature)
     console.log(data)
     return NextResponse.json({})
 }
